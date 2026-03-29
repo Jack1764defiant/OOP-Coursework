@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -88,23 +90,23 @@ public class WMSInterface {
                     break;
                 }
                 case "2" -> {
-                    //GenerateExpenseReportInPeriod(scanner);
+                    GenerateExpenseReportInPeriod(scanner);
                     break;
                 }
                 case "3" -> {
-                    //GenerateSalesReportInPeriod(scanner);
+                    GenerateSalesReportInPeriod(scanner);
                     break;
                 }
                 case "4" -> {
-                    //GenerateProfitReportInPeriod(scanner);
+                    GenerateProfitReportInPeriod(scanner);
                     break;
                 }
                 case "5" -> {
-                    //CheckRemainingBudget(scanner);
+                    CheckRemainingBudget(scanner);
                     break;
                 }
                 case "6" -> {
-                    //TopUpBudget(scanner);
+                    TopUpBudget(scanner);
                     break;
                 }
                 default -> {
@@ -114,6 +116,126 @@ public class WMSInterface {
                 }
             }
         }
+    }
+
+    public void CheckRemainingBudget(Scanner scanner){
+        System.out.printf("Remaining budget for inventory: £%,.2f", inventoryManager.GetRemainingBudget());
+        System.out.println();
+        scanner.nextLine();
+    }
+
+    public void TopUpBudget(Scanner scanner){
+        System.out.printf("Enter amount of money to transfer from profits to inventory budget (up to £%,.2f): £", inventoryManager.GetRemainingBudget());
+        String transferAmount = scanner.nextLine();
+        while (!isValidFloat(transferAmount) || Float.parseFloat(transferAmount) > inventoryManager.GetCurrentProfits()){
+            System.out.print("Invalid. Enter amount to transfer: £");
+            transferAmount = scanner.nextLine();
+        }
+        inventoryManager.PayIntoBudget(Float.parseFloat(transferAmount));
+    }
+
+    public LocalDate GetDate(Scanner scanner){
+        int year = IntInput(scanner, "Enter the year: ");
+        int month = IntInput(scanner, "Enter the month: ", 1, 12);
+        String day = Input(scanner, "Enter the day: ");
+        YearMonth inputDate = YearMonth.of(year, month);
+        while (!isValidInteger(day) || !inputDate.isValidDay(Integer.parseInt(day))){
+            day = Input(scanner, "Invalid. Enter the day: ");
+        }
+        LocalDate date = LocalDate.now();
+        date.withYear(year);
+        date.withMonth(month);
+        date.withDayOfMonth(Integer.parseInt(day));
+        return date;
+    }
+
+    public void GenerateExpenseReportInPeriod(Scanner scanner){
+        ClearTerminal();
+        System.out.println("Start Date");
+        LocalDate startDate = GetDate(scanner);
+        System.out.println("End Date");
+        LocalDate endDate = GetDate(scanner);
+        ArrayList<Order> purchasesInPeriod = new ArrayList<>();
+        float totalCost = 0.0f;
+        for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
+        {
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            for (Order order : ordersInPeriod){
+                if (!order.isSale()){
+                    purchasesInPeriod.add(order);
+                    totalCost += order.GetOrderCost();
+                }
+            }
+        }
+        for (Order purchase : purchasesInPeriod){
+            System.out.printf("Paid £%,.2f at " + purchase.GetOrderTime().toString() + " to " + supplierAndClientManager.GetSupplierOrClientByID(purchase.GetID()).GetName(), purchase.GetOrderCost());
+            System.out.println("");
+        }
+        System.out.printf("Total expenses over period: £%,.2f", totalCost);
+        System.out.println();
+        scanner.nextLine();
+    }
+
+    public void GenerateSalesReportInPeriod(Scanner scanner){
+        ClearTerminal();
+        System.out.println("Start Date");
+        LocalDate startDate = GetDate(scanner);
+        System.out.println("End Date");
+        LocalDate endDate = GetDate(scanner);
+        ArrayList<Order> salesInPeriod = new ArrayList<>();
+        float totalSales = 0.0f;
+        for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
+        {
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            for (Order order : ordersInPeriod){
+                if (order.isSale()){
+                    salesInPeriod.add(order);
+                    totalSales += order.GetOrderCost();
+                }
+            }
+        }
+        for (Order sale : salesInPeriod){
+            System.out.printf("Made £%,.2f at " + sale.GetOrderTime().toString() + " from " + supplierAndClientManager.GetSupplierOrClientByID(sale.GetID()).GetName(), sale.GetOrderCost());
+            System.out.println("");
+        }
+        System.out.printf("Total sales over period: £%,.2f", totalSales);
+        System.out.println();
+        scanner.nextLine();
+    }
+
+    public void GenerateProfitReportInPeriod(Scanner scanner){
+        ClearTerminal();
+        LocalDate startDate = GetDate(scanner);
+        System.out.println("End Date");
+        LocalDate endDate = GetDate(scanner);
+        ArrayList<Order> allOrdersInPeriod = new ArrayList<>();
+        float totalProfit = 0.0f;
+        for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
+        {
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            allOrdersInPeriod.addAll(ordersInPeriod);
+            for (Order order : ordersInPeriod){
+                if (order.isSale()){
+                    totalProfit += order.GetOrderCost();
+                }
+                else{
+                    totalProfit -= order.GetOrderCost();
+                }
+            }
+        }
+        for (Order order : allOrdersInPeriod){
+            if (order.isSale()){
+                System.out.printf("Made £%,.2f at " + order.GetOrderTime().toString() + " from " + supplierAndClientManager.GetSupplierOrClientByID(order.GetID()).GetName(), order.GetOrderCost());
+                System.out.println("");
+            }
+            else{
+                System.out.printf("Paid £%,.2f at " + order.GetOrderTime().toString() + " to " + supplierAndClientManager.GetSupplierOrClientByID(order.GetID()).GetName(), order.GetOrderCost());
+                System.out.println("");
+            }
+        }
+        System.out.printf("Total profit over period: £%,.2f", totalProfit);
+        System.out.println();
+        scanner.nextLine();
     }
 
 
