@@ -256,19 +256,19 @@ public class WMSInterface {
                     break;
                 }
                 case "2" -> {
-                    //CreateSupplierOrClient(scanner);
+                    CreateSupplierOrClient(scanner);
                     break;
                 }
                 case "3" -> {
-                    //EditSupplierOrClient(scanner);
+                    EditSupplierOrClient(scanner);
                     break;
                 }
                 case "4" -> {
-                    //DeleteSupplierOrClient(scanner);
+                    DeleteSupplierOrClient(scanner);
                     break;
                 }
                 case "5" -> {
-                    //ViewSupplierOrClient(scanner);
+                    ViewSupplierOrClient(scanner);
                     break;
                 }
                 default -> {
@@ -277,6 +277,70 @@ public class WMSInterface {
                     break;
                 }
             }
+        }
+    }
+
+
+    
+
+    
+    public void CreateSupplierOrClient(Scanner scanner){
+        int ID = IntInput(scanner, "Enter a unique ID number for the supplier or client: ");
+        String name = Input(scanner, "Enter name: ");
+        String emailAddress = Input(scanner, "Enter email address: ");
+        String phoneNumber = Input(scanner, "Enter phone number: ");
+        SupplierOrClient newSupplier = new SupplierOrClient(ID, name, emailAddress, phoneNumber);
+        supplierAndClientManager.AddSupplierOrClient(newSupplier);
+    }
+
+    
+    public SupplierOrClient GetSupplierOrClient(Scanner scanner){
+        String name = Input(scanner, "Enter name: ");
+        return supplierAndClientManager.GetSupplierOrClientByName(name);
+    }
+
+    
+    public void EditSupplierOrClient(Scanner scanner){
+        SupplierOrClient toEdit = GetSupplierOrClient(scanner);
+        if (toEdit == null){
+            System.out.print("No matching supplier found.");
+            scanner.nextLine();
+        }
+        else{
+            String supplierName = Input(scanner, "Enter supplier/client name (currently " + toEdit.GetName() + "): ");
+            String emailAddress = Input(scanner, "Enter email address (currently " + toEdit.GetEmailAddress() + "): ");
+            String phoneNumber = Input(scanner, "Enter phone number (currently " + toEdit.GetPhoneNumber() + "): ");
+            toEdit.SetName(supplierName);
+            toEdit.SetEmailAddress(emailAddress);
+            toEdit.SetPhoneNumber(phoneNumber);
+        }
+    }
+
+    
+    public void DeleteSupplierOrClient(Scanner scanner){
+        SupplierOrClient supplierToDelete = GetSupplierOrClient(scanner);
+        if (supplierToDelete == null){
+            System.out.print("No matching supplier found.");
+            scanner.nextLine();
+        }
+        else{
+            supplierAndClientManager.RemoveSupplierOrClient(supplierToDelete);
+        }
+    }
+
+    
+    public void ViewSupplierOrClient(Scanner scanner){
+        SupplierOrClient supplier = GetSupplierOrClient(scanner);
+        if (supplier == null){
+            System.out.print("No matching supplier found.");
+            scanner.nextLine();
+        }
+        else{
+            System.out.println("Name: " + supplier.GetName());
+            System.out.println("Supplier ID: " + supplier.GetID());
+            System.out.println("Email Address: " + supplier.GetEmailAddress());
+            System.out.println("Phone Number: " + supplier.GetPhoneNumber());
+            scanner.nextLine();
         }
     }
 
