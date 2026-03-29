@@ -533,11 +533,11 @@ public class WMSInterface {
                     break;
                 }
                 case "2" -> {
-                    //CheckItemStock(scanner);
+                    CheckItemStock(scanner);
                     break;
                 }
                 case "3" -> {
-                    //UpdateItemStock(scanner);
+                    UpdateItemStock(scanner);
                     break;
                 }
                 case "4" -> {
@@ -549,6 +549,43 @@ public class WMSInterface {
                     scanner.nextLine();
                     break;
                 }
+            }
+        }
+    }
+
+        public void CheckItemStock(Scanner scanner){
+        ClearTerminal();
+        String item = Input(scanner, "Enter the name of the item you want to check the stock of: ");
+        int stockAmount = inventoryManager.GetLevelOfItemStockByName(item);
+        if (stockAmount == -1){
+            System.out.print("Item not found.");
+            scanner.nextLine();
+        }
+        else{
+            System.out.print("Quantity of item remaining: " + stockAmount + ".");
+            scanner.nextLine();
+        }
+    }
+
+    
+    public void UpdateItemStock(Scanner scanner){
+        ClearTerminal();
+        String item = Input(scanner, "Enter the name of the item you want to update the stock of: ");
+        int stockAmount = inventoryManager.GetLevelOfItemStockByName(item);
+        if (stockAmount == -1){
+            System.out.print("Item not found.");
+            scanner.nextLine();
+        }
+        else{
+            System.out.print("Current stock: " + stockAmount + ".");
+            String newAmount = Input(scanner, "Enter new amount: ");
+            while (!isValidInteger(newAmount) || Integer.parseInt(newAmount) < 0){
+                newAmount = Input(scanner, "Invalid. Enter new amount: ");
+            }
+            try {
+                inventoryManager.GetStockItemByName(item).SetAmount(Integer.parseInt(newAmount));
+            } catch (StockException e) {
+                System.out.print("A StockException has occured in the UpdateItemStock function. Please retry your last update. If this issue persists, contact the developer (22402030@bucks.ac.uk).");
             }
         }
     }
