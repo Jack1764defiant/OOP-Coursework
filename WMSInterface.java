@@ -1,4 +1,5 @@
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -361,15 +362,15 @@ public class WMSInterface {
                     break;
                 }
                 case "2" -> {
-                    //PlaceOrder(scanner);
+                    PlaceOrder(scanner);
                     break;
                 }
                 case "3" -> {
-                    //UpdateOrderStatus(scanner);
+                    UpdateOrderStatus(scanner);
                     break;
                 }
                 case "4" -> {
-                    //ViewOrder(scanner);
+                    ViewOrder(scanner);
                     break;
                 }
                 default -> {
@@ -380,6 +381,142 @@ public class WMSInterface {
             }
         }
     }
+
+        public void PlaceOrder(Scanner scanner){
+        ClearTerminal();
+        String supplierName = Input(scanner, "Enter the supplier or client's name being ordered from or sent to: ");
+        SupplierOrClient supplierToOrderFrom = supplierAndClientManager.GetSupplierOrClientByName(supplierName);
+        String saleOrOrder = Input(scanner, "Enter S if this is a sale, or P if this is a purchase: ");
+        while (!saleOrOrder.toLowerCase().equals("p") && !saleOrOrder.toLowerCase().equals("s")){
+            saleOrOrder = Input(scanner, "Invalid. Enter S if this is a sale, or P if this is a purchase: ");
+        }
+        boolean sale = saleOrOrder.toLowerCase().equals("s");
+        if (supplierToOrderFrom != null){
+            boolean addingItemsToOrder = true;
+            ArrayList<StockItem> itemsToOrder = new ArrayList<>();
+            while (addingItemsToOrder){
+                ClearTerminal();
+                String item = Input(scanner, "Enter the item to order or x to quit: ");
+                if (item.toLowerCase().equals("x")){
+                    addingItemsToOrder = false;
+                }
+                else if (inventoryManager.GetStockItemByName(item) != null){
+                    String quantity = Input(scanner, "Enter quantity of the item to order: ");
+                    while (!isValidInteger(quantity) || inventoryManager.GetStockItemByName(item).GetAmount() < Integer.parseInt(quantity)){
+                        quantity = Input(scanner, "Invalid. Enter quantity of the item to order: ");
+                    }
+                    Float cost = FloatInput(scanner, "Enter the total cost of the items: £");
+                    int numericQuantity = Integer.parseInt(quantity);
+                    float costPerItem = cost/numericQuantity;
+                    itemsToOrder.add(new StockItem(item, numericQuantity, costPerItem));
+                }
+                else{
+                    System.out.println("Item not in stock and thus cannot be ordered.");
+                    scanner.nextLine();
+                }
+            }
+            Order placedOrder = new Order(supplierToOrderFrom.GetID(), itemsToOrder, LocalDateTime.now(), sale);
+            supplierToOrderFrom.AddOrderToHistory(placedOrder);
+            inventoryManager.OrderPlaced(placedOrder);
+            
+        }
+        else{
+            System.out.print("Supplier not found.");
+            scanner.nextLine();
+        }
+    }
+
+    
+    public void UpdateOrderStatus(Scanner scanner){
+        ClearTerminal();
+        SupplierOrClient supplierOrClientOrderIsWith = SelectSupplierOrClientForOrder(scanner);
+        Order order = SelectOrderOnDate(scanner, supplierOrClientOrderIsWith);
+
+        System.out.println("Choose a new status");
+        System.out.println("1. Reset to status to Placed");
+        System.out.println("1. In Transit");
+        System.out.println("2. Recieved (if purchase, adds contents to stock automatically)");
+        System.out.println("3. Cancelled");
+        String menuChoice = Input(scanner, "Enter option: ");
+
+        switch (menuChoice) {
+            case "1" -> {
+                order.SetOrderStatus(OrderStatus.Placed);
+                break;
+            }
+            case "2" -> {
+                order.SetOrderStatus(OrderStatus.InTransit);
+                break;
+            }
+            case "3" -> {
+                order.SetOrderStatus(OrderStatus.Recieved);
+                inventoryManager.OrderRecieved(order);
+                break;
+            }
+            case "4" -> {
+                order.SetOrderStatus(OrderStatus.Cancelled);
+                break;
+            }
+            default -> {
+                System.out.println(menuChoice + " is not a known option.");
+                scanner.nextLine();
+                break;
+            }
+        }
+    }
+
+    
+    public void ViewOrder(Scanner scanner){
+        ClearTerminal();
+        SupplierOrClient supplierOrClientToOrderFrom = SelectSupplierOrClientForOrder(scanner);
+        Order order = SelectOrderOnDate(scanner, supplierOrClientToOrderFrom);
+        System.out.println("Order from supplier " + supplierOrClientToOrderFrom.GetName() + " at " + order.GetOrderTime().toString());
+        System.out.println("Current Order Status: " + order.GetOrderStatus().toString());
+        for (StockItem item : order.GetItemsOrdered()){
+            System.out.print(item.GetItemName() + ": " + item.GetAmount() + ".");
+        }
+        System.out.printf("Total Cost: £%,.2f", order.GetOrderCost());
+        scanner.nextLine();
+    }
+
+    
+    public SupplierOrClient SelectSupplierOrClientForOrder(Scanner scanner){
+        String supplierName = Input(scanner, "Enter the supplier or client's name the order was placed with: ");
+        SupplierOrClient orderedFrom = supplierAndClientManager.GetSupplierOrClientByName(supplierName);
+
+        while (orderedFrom == null){
+
+            supplierName = Input(scanner, "Invalid. Enter the supplier or client's name the order was placed with: ");
+            orderedFrom = supplierAndClientManager.GetSupplierOrClientByName(supplierName);
+            
+        }
+        return orderedFrom;
+    }
+
+    
+    public Order SelectOrderOnDate(Scanner scanner, SupplierOrClient supplierToOrderFrom){
+        System.out.println("Enter the date the order was placed on.");
+        LocalDate date = GetDate(scanner);
+        ArrayList<Order> ordersOnDate = supplierToOrderFrom.GetOrdersOnDate(date);
+        int count = 1;
+        for (Order order : ordersOnDate){
+            System.out.println("Order " + count);
+            System.out.print("Order placed on ");
+            System.out.println(order.GetOrderTime().toString());
+            for (StockItem item : order.GetItemsOrdered()){
+                System.out.print(item.GetItemName() + ": " + item.GetAmount() + ".");
+            }
+            count++;
+        }
+
+        String orderNumber = Input(scanner, "Enter the number of the order you want to select:");
+        while (!isValidInteger(orderNumber) || Integer.parseInt(orderNumber) < 1 || Integer.parseInt(orderNumber) > ordersOnDate.size()){
+            orderNumber = Input(scanner, "Invalid. Enter the number of the order you want to select:");
+        }
+
+        return ordersOnDate.get(Integer.parseInt(orderNumber) - 1);
+    }
+
 
     public void HandleInventoryMenu(Scanner scanner){
         boolean inInventoryMenu = true;
