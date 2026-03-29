@@ -14,6 +14,12 @@ public class WMSInterface {
         supplierAndClientManager = new SupplierAndClientManager(new ArrayList<>());
     }
 
+    public void RunWMSInterface(){
+        while (running){
+            DisplayMenu();
+        }
+    }
+
     public void DisplayMenu(){
         ClearTerminal();
         System.out.println("WMS Menu");
@@ -23,7 +29,7 @@ public class WMSInterface {
         System.out.println("4. Inventory");
         System.out.println("5. Financial");
         if (displayLowStockAlerts){
-            //PrintLowStockAlerts();
+            PrintLowStockAlerts();
         }
         String menuChoice = Input(scanner, "Enter option: ");
         switch (menuChoice) {
@@ -32,19 +38,19 @@ public class WMSInterface {
                 break;
             }
             case "2" -> {
-                //HandleSuppliersAndClientsMenu(scanner);
+                HandleSuppliersAndClientsMenu(scanner);
                 break;
             }
             case "3" -> {
-                //HandleOrderMenu(scanner);
+                HandleOrderMenu(scanner);
                 break;
             }
             case "4" -> {
-                //HandleInventoryMenu(scanner);
+                HandleInventoryMenu(scanner);
                 break;
             }
             case "5" -> {
-                //HandleFinancialMenu(scanner);
+                HandleFinancialMenu(scanner);
                 break;
             }
             default -> {
@@ -54,6 +60,176 @@ public class WMSInterface {
             }
         }
     }
+
+    public void PrintLowStockAlerts(){
+        ArrayList<StockItem> LowStockItems = inventoryManager.CheckForLowStock();
+        for (StockItem lowStockItem : LowStockItems){
+            System.out.println("Low on " + lowStockItem.GetItemName() + " - only " + String.valueOf(lowStockItem.GetAmount()) + " remain.");
+        }
+        if (LowStockItems.isEmpty()){
+            System.out.println("No items low on stock.");
+        }
+    }
+
+    public void HandleFinancialMenu(Scanner scanner){
+        boolean inMenu = true;
+        while (inMenu){
+            ClearTerminal();
+            System.out.println("1. Exit Menu");
+            System.out.println("2. Generate expense report between provided dates");
+            System.out.println("3. Generate sales report between provided dates");
+            System.out.println("4. Generate profit report between provided dates");
+            System.out.println("5. Check Remaining budget for inventory");
+            System.out.println("6. Top up budget");
+            String menuChoice = Input(scanner, "Enter option: ");
+            switch (menuChoice) {
+                case "1" -> {
+                    inMenu = false;
+                    break;
+                }
+                case "2" -> {
+                    //GenerateExpenseReportInPeriod(scanner);
+                    break;
+                }
+                case "3" -> {
+                    //GenerateSalesReportInPeriod(scanner);
+                    break;
+                }
+                case "4" -> {
+                    //GenerateProfitReportInPeriod(scanner);
+                    break;
+                }
+                case "5" -> {
+                    //CheckRemainingBudget(scanner);
+                    break;
+                }
+                case "6" -> {
+                    //TopUpBudget(scanner);
+                    break;
+                }
+                default -> {
+                    System.out.println(menuChoice + " is not a known option.");
+                    scanner.nextLine();
+                    break;
+                }
+            }
+        }
+    }
+
+
+
+    public void HandleSuppliersAndClientsMenu(Scanner scanner){
+        boolean inMenu = true;
+        while (inMenu){
+            ClearTerminal();
+            System.out.println("1. Exit Menu");
+            System.out.println("2. Create new Supplier or Client");
+            System.out.println("3. Edit Supplier or Client");
+            System.out.println("4. Delete Supplier or Client");
+            System.out.println("5. View Supplier or Client details");
+            String menuChoice = Input(scanner, "Enter option: ");
+            switch (menuChoice) {
+                case "1" -> {
+                    inMenu = false;
+                    break;
+                }
+                case "2" -> {
+                    //CreateSupplierOrClient(scanner);
+                    break;
+                }
+                case "3" -> {
+                    //EditSupplierOrClient(scanner);
+                    break;
+                }
+                case "4" -> {
+                    //DeleteSupplierOrClient(scanner);
+                    break;
+                }
+                case "5" -> {
+                    //ViewSupplierOrClient(scanner);
+                    break;
+                }
+                default -> {
+                    System.out.println(menuChoice + " is not a known option.");
+                    scanner.nextLine();
+                    break;
+                }
+            }
+        }
+    }
+
+
+    public void HandleOrderMenu(Scanner scanner){
+        boolean inOrderMenu = true;
+        while (inOrderMenu){
+            ClearTerminal();
+            System.out.println("1. Exit Order Menu");
+            System.out.println("2. Place Order");
+            System.out.println("3. Update Order Status");
+            System.out.println("3. Update Order Status");
+            System.out.println("4. View Order");
+            String menuChoice = Input(scanner, "Enter option: ");
+            switch (menuChoice) {
+                case "1" -> {
+                    inOrderMenu = false;
+                    break;
+                }
+                case "2" -> {
+                    //PlaceOrder(scanner);
+                    break;
+                }
+                case "3" -> {
+                    //UpdateOrderStatus(scanner);
+                    break;
+                }
+                case "4" -> {
+                    //ViewOrder(scanner);
+                    break;
+                }
+                default -> {
+                    System.out.println(menuChoice + " is not a known option.");
+                    scanner.nextLine();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void HandleInventoryMenu(Scanner scanner){
+        boolean inInventoryMenu = true;
+        while (inInventoryMenu){
+            ClearTerminal();
+            System.out.println("1. Exit Inventory Menu");
+            System.out.println("2. Check Stock of Item");
+            System.out.println("3. Update Item Amount Manually");
+            System.out.println("4. Toggle Display Low Stock Alerts: Currently " + String.valueOf(displayLowStockAlerts));
+            String menuChoice = Input(scanner, "Enter option: ");
+            switch (menuChoice) {
+                case "1" -> {
+                    inInventoryMenu = false;
+                    break;
+                }
+                case "2" -> {
+                    //CheckItemStock(scanner);
+                    break;
+                }
+                case "3" -> {
+                    //UpdateItemStock(scanner);
+                    break;
+                }
+                case "4" -> {
+                    displayLowStockAlerts = !displayLowStockAlerts;
+                    break;
+                }
+                default -> {
+                    System.out.println(menuChoice + " is not a known option.");
+                    scanner.nextLine();
+                    break;
+                }
+            }
+        }
+    }
+
 
     public String Input(Scanner scanner, String prompt){
         System.out.print(prompt);
@@ -93,13 +269,6 @@ public class WMSInterface {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
-
-    public void RunWMSInterface(){
-        while (running){
-            DisplayMenu();
-        }
-    }
-
 
     public boolean isValidInteger(String str) { 
         try {  
