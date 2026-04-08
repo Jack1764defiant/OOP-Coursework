@@ -152,6 +152,7 @@ public class WMSInterface {
         inventoryManager.PayIntoBudget(Float.parseFloat(transferAmount));
     }
 
+    // Takes in a date from the user in the order year, month, day and returns it
     public LocalDate GetDate(Scanner scanner){
         int year = IntInput(scanner, "Enter the year: ");
         int month = IntInput(scanner, "Enter the month: ", 1, 12);
@@ -399,6 +400,7 @@ public class WMSInterface {
         ClearTerminal();
         String supplierName = Input(scanner, "Enter the supplier or client's name being ordered from or sent to: ");
         SupplierOrClient supplierToOrderFrom = supplierAndClientManager.GetSupplierOrClientByName(supplierName);
+        // Check the supplier actually exists
         if (supplierToOrderFrom != null){
             String saleOrOrder = Input(scanner, "Enter S if this is a sale, or P if this is a purchase: ");
             while (!saleOrOrder.toLowerCase().equals("p") && !saleOrOrder.toLowerCase().equals("s")){
@@ -407,12 +409,14 @@ public class WMSInterface {
             boolean sale = saleOrOrder.toLowerCase().equals("s");
             boolean addingItemsToOrder = true;
             ArrayList<StockItem> itemsToOrder = new ArrayList<>();
+            //Allow them to add an indefinite number of items to the order
             while (addingItemsToOrder){
                 ClearTerminal();
                 String item = Input(scanner, "Enter the item to order or x to quit: ");
                 if (item.toLowerCase().equals("x")){
                     addingItemsToOrder = false;
                 }
+                // If this is a sale, check we actually have the stock to sell
                 else if (inventoryManager.GetStockItemByName(item) != null){
                     String quantity = Input(scanner, "Enter quantity of the item to order: ");
                     while (!isValidInteger(quantity) || inventoryManager.GetStockItemByName(item).GetAmount() < Integer.parseInt(quantity)){

@@ -13,6 +13,7 @@ public class SupplierAndClientManager {
 
     public SupplierOrClient GetSupplierOrClientByName(String supplierName){
         for (int i = 0; i < suppliersAndClients.size(); i++) {
+            // make both names lower case to avoid issues where the name has been typed with the wrong casing
             if (suppliersAndClients.get(i).GetName().toLowerCase().equals(supplierName.toLowerCase())){
                 return suppliersAndClients.get(i);
             }
