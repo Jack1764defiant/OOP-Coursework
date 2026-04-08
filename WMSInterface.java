@@ -393,12 +393,12 @@ public class WMSInterface {
         ClearTerminal();
         String supplierName = Input(scanner, "Enter the supplier or client's name being ordered from or sent to: ");
         SupplierOrClient supplierToOrderFrom = supplierAndClientManager.GetSupplierOrClientByName(supplierName);
-        String saleOrOrder = Input(scanner, "Enter S if this is a sale, or P if this is a purchase: ");
-        while (!saleOrOrder.toLowerCase().equals("p") && !saleOrOrder.toLowerCase().equals("s")){
-            saleOrOrder = Input(scanner, "Invalid. Enter S if this is a sale, or P if this is a purchase: ");
-        }
-        boolean sale = saleOrOrder.toLowerCase().equals("s");
         if (supplierToOrderFrom != null){
+            String saleOrOrder = Input(scanner, "Enter S if this is a sale, or P if this is a purchase: ");
+            while (!saleOrOrder.toLowerCase().equals("p") && !saleOrOrder.toLowerCase().equals("s")){
+                saleOrOrder = Input(scanner, "Invalid. Enter S if this is a sale, or P if this is a purchase: ");
+            }
+            boolean sale = saleOrOrder.toLowerCase().equals("s");
             boolean addingItemsToOrder = true;
             ArrayList<StockItem> itemsToOrder = new ArrayList<>();
             while (addingItemsToOrder){
