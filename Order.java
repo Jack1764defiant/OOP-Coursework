@@ -2,10 +2,16 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 public class Order {
-    //If this boolean is false, this is an order the company has placed from a supplier
-    //If this boolean is true, this is an order another company has placed with us
+    //
+    /**
+     * Whether this order is a sale or a purchase.
+     * If this boolean is false, this is an order the company has placed from a supplier
+     * If this boolean is true, this is an order another company has placed with us
+     */
     private final boolean sale;
-    //The ID of the supplier or client depending on whether this is a sale or a purchase
+    /**
+     * The ID of the supplier if purchase or client if sale
+     */
     private final int otherPartiesID;
     private OrderStatus orderStatus;
     private final ArrayList<StockItem> itemsOrdered;
