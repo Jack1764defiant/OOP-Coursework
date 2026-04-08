@@ -417,6 +417,16 @@ public class WMSInterface {
                     float costPerItem = cost/numericQuantity;
                     itemsToOrder.add(new StockItem(item, numericQuantity, costPerItem));
                 }
+                else if (!sale){
+                    String quantity = Input(scanner, "Enter quantity of the item to order: ");
+                    while (!isValidInteger(quantity)){
+                        quantity = Input(scanner, "Invalid. Enter quantity of the item to order: ");
+                    }
+                    Float cost = FloatInput(scanner, "Enter the total cost of the items: £");
+                    int numericQuantity = Integer.parseInt(quantity);
+                    float costPerItem = cost/numericQuantity;
+                    itemsToOrder.add(new StockItem(item, numericQuantity, costPerItem));
+                }
                 else{
                     System.out.println("Item not in stock and thus cannot be ordered.");
                     scanner.nextLine();
