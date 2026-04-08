@@ -34,7 +34,7 @@ public class SupplierOrClient {
         return ordersOnDate;
     }
 
-    public ArrayList<Order> GetOrdersOnBetweenDates(LocalDate beginningDate, LocalDate endDate){
+    public ArrayList<Order> GetOrdersBetweenDates(LocalDate beginningDate, LocalDate endDate){
         ArrayList<Order> ordersInPeriod = new ArrayList<>();
         for (Order order : orderHistory){
             if (order.GetOrderTime().getYear() >= beginningDate.getYear() && order.GetOrderTime().getYear() <= endDate.getYear() 

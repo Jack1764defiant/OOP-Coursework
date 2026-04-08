@@ -3,8 +3,8 @@ import java.util.ArrayList;
 public class InventoryManager {
     private int lowStockThreshold = 10;
     private final ArrayList<StockItem> inventory;
-    private float budget = 0.0f;
-    private float profit = 0.0f;
+    private float budget = 3000.0f;
+    private float profit = 500.0f;
 
     public InventoryManager(ArrayList<StockItem> _inventory, int _lowStockThreshold){
         inventory = _inventory;

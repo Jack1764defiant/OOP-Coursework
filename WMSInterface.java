@@ -84,6 +84,7 @@ public class WMSInterface {
             System.out.println("4. Generate profit report between provided dates");
             System.out.println("5. Check Remaining budget for inventory");
             System.out.println("6. Top up budget");
+            System.out.println("7. Check surplus money");
             String menuChoice = Input(scanner, "Enter option: ");
             switch (menuChoice) {
                 case "1" -> {
@@ -110,6 +111,10 @@ public class WMSInterface {
                     TopUpBudget(scanner);
                     break;
                 }
+                case "7" -> {
+                    CheckSurplusMoney(scanner);
+                    break;
+                }
                 default -> {
                     System.out.println(menuChoice + " is not a known option.");
                     scanner.nextLine();
@@ -125,10 +130,16 @@ public class WMSInterface {
         scanner.nextLine();
     }
 
+    public void CheckSurplusMoney(Scanner scanner){
+        System.out.printf("Surplus money: £%,.2f", inventoryManager.GetCurrentProfits());
+        System.out.println();
+        scanner.nextLine();
+    }
+
     public void TopUpBudget(Scanner scanner){
-        System.out.printf("Enter amount of money to transfer from profits to inventory budget (up to £%,.2f): £", inventoryManager.GetRemainingBudget());
+        System.out.printf("Enter amount of money to transfer from profits to inventory budget (up to £%,.2f): £", inventoryManager.GetCurrentProfits());
         String transferAmount = scanner.nextLine();
-        while (!isValidFloat(transferAmount) || Float.parseFloat(transferAmount) > inventoryManager.GetCurrentProfits()){
+        while (!isValidFloat(transferAmount) || Float.parseFloat(transferAmount) > inventoryManager.GetCurrentProfits() || Float.parseFloat(transferAmount) < 0){
             System.out.print("Invalid. Enter amount to transfer: £");
             transferAmount = scanner.nextLine();
         }
@@ -160,7 +171,7 @@ public class WMSInterface {
         float totalCost = 0.0f;
         for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
         {
-            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersBetweenDates(startDate, endDate);
             for (Order order : ordersInPeriod){
                 if (!order.isSale()){
                     purchasesInPeriod.add(order);
@@ -187,7 +198,7 @@ public class WMSInterface {
         float totalSales = 0.0f;
         for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
         {
-            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersBetweenDates(startDate, endDate);
             for (Order order : ordersInPeriod){
                 if (order.isSale()){
                     salesInPeriod.add(order);
@@ -213,7 +224,7 @@ public class WMSInterface {
         float totalProfit = 0.0f;
         for (SupplierOrClient supplierOrClient : supplierAndClientManager.GetSuppliersAndClients())
         {
-            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersOnBetweenDates(startDate, endDate);
+            ArrayList<Order> ordersInPeriod = supplierOrClient.GetOrdersBetweenDates(startDate, endDate);
             allOrdersInPeriod.addAll(ordersInPeriod);
             for (Order order : ordersInPeriod){
                 if (order.isSale()){
@@ -282,9 +293,6 @@ public class WMSInterface {
     }
 
 
-    
-
-    
     public void CreateSupplierOrClient(Scanner scanner){
         int ID = IntInput(scanner, "Enter a unique ID number for the supplier or client: ");
         String name = Input(scanner, "Enter name: ");
@@ -352,7 +360,6 @@ public class WMSInterface {
             ClearTerminal();
             System.out.println("1. Exit Order Menu");
             System.out.println("2. Place Order");
-            System.out.println("3. Update Order Status");
             System.out.println("3. Update Order Status");
             System.out.println("4. View Order");
             String menuChoice = Input(scanner, "Enter option: ");
