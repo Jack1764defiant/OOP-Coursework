@@ -102,18 +102,42 @@ public class SupplierOrClient {
         name = newName;
     }
 
+    /**
+     * <p>
+     * Getter for phone number
+     * </p>
+     * @return the client or supplier's phone number
+     */
     public String GetPhoneNumber(){
         return phoneNumber;
     }
 
+    /**
+     * <p>
+     * Setter for phoneNumber
+     * </p>
+     * @param newPhoneNumber - the new phone number
+     */
     public void SetPhoneNumber(String newPhoneNumber){
         phoneNumber = newPhoneNumber;
     }
 
+    /**
+     * <p>
+     * Getter for email address
+     * </p>
+     * @return the client/supplier's email address
+     */
     public String GetEmailAddress(){
         return emailAddress;
     }
 
+    /**
+     * <p>
+     * Setter for email address
+     * </p>
+     * @param newEmailAddress - the client/supplier's new email address
+     */
     public void SetEmailAddress(String newEmailAddress){
         emailAddress = newEmailAddress;
     }

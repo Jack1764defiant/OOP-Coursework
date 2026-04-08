@@ -23,12 +23,22 @@ public class WMSInterface {
         supplierAndClientManager = new SupplierAndClientManager(suppliersAndClients);
     }
 
+    /**
+     * <p>
+     * Continously display the main menu
+     * </p>
+     */
     public void RunWMSInterface(){
         while (running){
             DisplayMenu();
         }
     }
 
+    /**
+     * <p>
+     * Display the main menu, take in the user's input, and select an option based on their input
+     * </p>
+     */
     public void DisplayMenu(){
         ClearTerminal();
         System.out.println("WMS Menu");
@@ -70,6 +80,11 @@ public class WMSInterface {
         }
     }
 
+    /**
+     * <p>
+     * Print each item which as an amount fewer than the lowStockThreshold in the inventoryManager
+     * </p>
+     */
     public void PrintLowStockAlerts(){
         ArrayList<StockItem> LowStockItems = inventoryManager.CheckForLowStock();
         for (StockItem lowStockItem : LowStockItems){
@@ -656,18 +671,32 @@ public class WMSInterface {
         System.out.flush();
     }
 
-    public boolean isValidInteger(String str) { 
+    /**
+     * <p>
+     * Check if a provided string is a valid integer
+     * </p>
+     * @param string - the string we want to check
+     * @return whether the string is a valid integer
+     */
+    public boolean isValidInteger(String string) { 
         try {  
-            Integer.valueOf(str);  
+            Integer.valueOf(string);  
             return true;
         } catch(NumberFormatException e){  
             return false;  
         }  
     }
 
-    public boolean isValidFloat(String str) { 
+    /**
+     * <p>
+     * Check if a provided string is a valid floating point number
+     * </p>
+     * @param string - the string we want to check
+     * @return whether the value is a valid integer
+     */
+    public boolean isValidFloat(String string) { 
         try {  
-            Float.valueOf(str);  
+            Float.valueOf(string);  
             return true;
         } catch(NumberFormatException e){  
             return false;  
