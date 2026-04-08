@@ -95,6 +95,12 @@ public class WMSInterface {
         }
     }
 
+    /**
+     * <p>
+     * Print the financial sub menu, and take in user input and process which option they selected
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     */
     public void HandleFinancialMenu(Scanner scanner){
         boolean inMenu = true;
         while (inMenu){
@@ -272,6 +278,12 @@ public class WMSInterface {
         scanner.nextLine();
     }
 
+    /**
+     * <p>
+     * Print the suppliers and clients sub menu, and take in user input and process which option they selected
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     */
     public void HandleSuppliersAndClientsMenu(Scanner scanner){
         boolean inMenu = true;
         while (inMenu){
@@ -374,6 +386,12 @@ public class WMSInterface {
     }
 
 
+    /**
+     * <p>
+     * Print the orders sub menu, and take in user input and process which option they selected
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     */
     public void HandleOrderMenu(Scanner scanner){
         boolean inOrderMenu = true;
         while (inOrderMenu){
@@ -558,6 +576,13 @@ public class WMSInterface {
         return ordersOnDate.get(Integer.parseInt(orderNumber) - 1);
     }
 
+
+    /**
+     * <p>
+     * Print the inventory sub menu, and take in user input and process which option they selected
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     */
 
     public void HandleInventoryMenu(Scanner scanner){
         boolean inInventoryMenu = true;
