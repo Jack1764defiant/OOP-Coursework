@@ -13,8 +13,14 @@ public class WMSInterface {
 
     public WMSInterface(){
         scanner = new Scanner(System.in);
-        inventoryManager = new InventoryManager(new ArrayList<>(), 10);
-        supplierAndClientManager = new SupplierAndClientManager(new ArrayList<>());
+        // Example values used to make testing easier
+        ArrayList<StockItem> inventoryContents = new ArrayList<>();
+        inventoryContents.add(new StockItem("RAM", 5, 200));
+        ArrayList<SupplierOrClient> suppliersAndClients = new ArrayList<>();
+        suppliersAndClients.add(new SupplierOrClient(2, "Jeff's RAM", "jeff@jeffsram.ac.uk", "07473462346"));
+        
+        inventoryManager = new InventoryManager(inventoryContents, 10);
+        supplierAndClientManager = new SupplierAndClientManager(suppliersAndClients);
     }
 
     public void RunWMSInterface(){
