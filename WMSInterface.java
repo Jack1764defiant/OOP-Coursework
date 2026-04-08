@@ -632,11 +632,27 @@ public class WMSInterface {
     }
 
 
+    /**
+     * <p>
+     * Print a prompt and take in the user's response
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     * @param prompt - the prompt to display to the user 
+     * @return the string the user entered
+     */
     public String Input(Scanner scanner, String prompt){
         System.out.print(prompt);
         return scanner.nextLine();
     }
 
+    /**
+     * <p>
+     * Print a prompt and take in the user's response as an intenger, checking that the value is a valid integer before excepting it
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     * @param prompt - the prompt to display to the user 
+     * @return the number the user entered
+     */
     public int IntInput(Scanner scanner, String prompt){
         String value = Input(scanner, prompt);
         while (!isValidInteger(value)){
@@ -645,6 +661,16 @@ public class WMSInterface {
         return Integer.parseInt(value);
     }
 
+    /**
+     * <p>
+     * Print a prompt and take in the user's response as an intenger, checking that the value is a valid integer and is between the lower and upper bounds provided before excepting it
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     * @param prompt - the prompt to display to the user
+     * @param lowerBound - the lowest acceptable number
+     * @param upperBound - the highest acceptable number 
+     * @return the number the user entered
+     */
     public int IntInput(Scanner scanner, String prompt, int lowerBound, int upperBound){
         String value = Input(scanner, prompt);
         while (!isValidInteger(value) || Integer.parseInt(value) < lowerBound || Integer.parseInt(value) > upperBound){
@@ -653,6 +679,14 @@ public class WMSInterface {
         return Integer.parseInt(value);
     }
 
+    /**
+     * <p>
+     * Print a prompt and take in the user's response as an float, checking that the value is a valid float before excepting it
+     * </p>
+     * @param scanner - the scanner to use to take in user input
+     * @param prompt - the prompt to display to the user 
+     * @return the number the user entered
+     */
     public float FloatInput(Scanner scanner, String prompt){
         String value = Input(scanner, prompt);
         while (!isValidFloat(value)){
@@ -662,6 +696,11 @@ public class WMSInterface {
     }
 
 
+    /**
+     * <p>
+     * Clear the terminal/command prompt
+     * </p>
+     */
     public void ClearTerminal(){
         //Clears linux, macOS and Visual Studio terminal
         System.out.print("\033\143");
