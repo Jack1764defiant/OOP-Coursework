@@ -493,6 +493,7 @@ public class WMSInterface {
             System.out.print(item.GetItemName() + ": " + item.GetAmount() + ".");
         }
         System.out.printf("Total Cost: £%,.2f", order.GetOrderCost());
+        System.out.println("");
         scanner.nextLine();
     }
 
@@ -521,7 +522,7 @@ public class WMSInterface {
             System.out.print("Order placed on ");
             System.out.println(order.GetOrderTime().toString());
             for (StockItem item : order.GetItemsOrdered()){
-                System.out.print(item.GetItemName() + ": " + item.GetAmount() + ".");
+                System.out.println(item.GetItemName() + ": " + item.GetAmount() + ".");
             }
             count++;
         }
