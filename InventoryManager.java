@@ -45,7 +45,8 @@ public class InventoryManager {
                 StockItem itemAlreadyInStock = GetStockItemByName(item.GetItemName());
                 // If we don't currently have any of this item in stock, create a new entry in the inventory, otherwise add to the amount of the existing entry
                 if (itemAlreadyInStock == null){
-                    inventory.add(item);
+                    StockItem itemToAdd = new StockItem(item.GetItemName(), item.GetAmount(), item.GetIndividualCost());
+                    inventory.add(itemToAdd);
                 }
                 else{
                     try {

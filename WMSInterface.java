@@ -451,9 +451,9 @@ public class WMSInterface {
 
         System.out.println("Choose a new status");
         System.out.println("1. Reset to status to Placed");
-        System.out.println("1. In Transit");
-        System.out.println("2. Recieved (if purchase, adds contents to stock automatically)");
-        System.out.println("3. Cancelled");
+        System.out.println("2. In Transit");
+        System.out.println("3. Recieved (if purchase, adds contents to stock automatically)");
+        System.out.println("4. Cancelled");
         String menuChoice = Input(scanner, "Enter option: ");
 
         switch (menuChoice) {
@@ -576,11 +576,11 @@ public class WMSInterface {
         String item = Input(scanner, "Enter the name of the item you want to check the stock of: ");
         int stockAmount = inventoryManager.GetLevelOfItemStockByName(item);
         if (stockAmount == -1){
-            System.out.print("Item not found.");
+            System.out.println("Item not found.");
             scanner.nextLine();
         }
         else{
-            System.out.print("Quantity of item remaining: " + stockAmount + ".");
+            System.out.println("Quantity of item remaining: " + stockAmount + ".");
             scanner.nextLine();
         }
     }
@@ -591,11 +591,11 @@ public class WMSInterface {
         String item = Input(scanner, "Enter the name of the item you want to update the stock of: ");
         int stockAmount = inventoryManager.GetLevelOfItemStockByName(item);
         if (stockAmount == -1){
-            System.out.print("Item not found.");
+            System.out.println("Item not found.");
             scanner.nextLine();
         }
         else{
-            System.out.print("Current stock: " + stockAmount + ".");
+            System.out.println("Current stock: " + stockAmount + ".");
             String newAmount = Input(scanner, "Enter new amount: ");
             while (!isValidInteger(newAmount) || Integer.parseInt(newAmount) < 0){
                 newAmount = Input(scanner, "Invalid. Enter new amount: ");
@@ -603,7 +603,7 @@ public class WMSInterface {
             try {
                 inventoryManager.GetStockItemByName(item).SetAmount(Integer.parseInt(newAmount));
             } catch (StockException e) {
-                System.out.print("A StockException has occured in the UpdateItemStock function. Please retry your last update. If this issue persists, contact the developer (22402030@bucks.ac.uk).");
+                System.out.println("A StockException has occured in the UpdateItemStock function. Please retry your last update. If this issue persists, contact the developer (22402030@bucks.ac.uk).");
             }
         }
     }
