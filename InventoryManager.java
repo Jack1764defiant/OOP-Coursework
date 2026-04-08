@@ -11,10 +11,24 @@ public class InventoryManager {
         lowStockThreshold = _lowStockThreshold;
     }
 
+    /**
+     * <p>
+     * Adds the provided stockitem to the inventory arraylist
+     * </p>
+     * @param newStock the stock item to add
+     */
     public void AddNewStockItem(StockItem newStock){
         inventory.add(newStock);
     }
 
+    
+    /**
+     * <p>
+     * Takes in an order. If it is a sale, it takes payment, and then removes all stockitems in the order from the inventory's stock.
+     * If it is a purchase, it payes the amount required.
+     * </p>
+     * @param order - the order to process
+     */
     public void OrderPlaced(Order order){
         if (order.isSale()){
             RecievePayment(order.GetOrderCost());
@@ -38,6 +52,12 @@ public class InventoryManager {
         }
     }
 
+    /**
+     * <p>
+     * Takes in an order that has been recieved. If it is a purchase order, it adds the purchased stock items to inventory
+     * </p>
+     * @param order the order to process
+     */
     public void OrderRecieved(Order order){
         if (!order.isSale()){
             for (StockItem item : order.GetItemsOrdered())
@@ -60,7 +80,13 @@ public class InventoryManager {
         }
     }
 
-    // Returns -1 if no stock items have a matching name
+    /**
+     * <p>
+     * Get how many items of a particular stock item are left using its name, or -1 if that item does not exist
+     * </p>
+     * @param name - the name of the item you want the stock for
+     * @return the amount of that item in stock, or -1 if that item does not exit
+     */
     public int GetLevelOfItemStockByName(String name){
         StockItem stockItem = GetStockItemByName(name);
         if (stockItem != null){
@@ -71,6 +97,13 @@ public class InventoryManager {
         }
     }
 
+    /**
+     * <p>
+     * Finds a stock item in the inventory by name
+     * </p>
+     * @param name - the name we want to find the matching item for
+     * @return the stockitem that matches the name, or null if none do
+     */
     public StockItem GetStockItemByName(String name){
         for (StockItem stockItem : inventory){
             // Converts both names to lowercase to avoid issues where a capitalised name does not match a non-capitalised one
@@ -81,6 +114,12 @@ public class InventoryManager {
         return null;
     }
 
+    /**
+     * <p>
+     * Sets the amount at which items should be registered as low on stock
+     * </p>
+     * @param newThreshold - the new amount at which stock items should start being registered as low on stock
+     */
     public void setLowStockThreshold(int newThreshold){
         // Low stock threshold should not go below 0
         if (newThreshold >= 0){
@@ -91,6 +130,12 @@ public class InventoryManager {
         }
     }
 
+    /**
+     * <p>
+     * Iterates through all items in inventory and returns the ones which are low on stock
+     * </p>
+     * @return an arraylist of the stockitems that are low on stock
+     */
     public ArrayList<StockItem> CheckForLowStock(){
         ArrayList<StockItem> itemsLowOnStock = new ArrayList<>();
         for (StockItem stockItem : inventory){
@@ -101,23 +146,53 @@ public class InventoryManager {
         return itemsLowOnStock;
     }
 
+    /**
+     * <p>
+     * Subtracts the provided cost from the budget
+     * </p>
+     * @param cost - the cost of the purchase
+     */
     public void MakePurchase(float cost){
         budget -= cost;
     }
 
+    /**
+     * <p>
+     * Adds the provided amount to the profit
+     * </p>
+     * @param payment the amount being paid in
+     */
     public void RecievePayment(float payment){
         profit += payment;
     }
 
+    /**
+     * <p>
+     * Takes money from the profit and moves it into the budget
+     * </p>
+     * @param amount how much money to move from profit to budget
+     */
     public void PayIntoBudget(float amount){
         profit -= amount;
         budget += amount;
     }
 
+    /**
+     * <p>
+     * Getter for budget
+     * </p>
+     * @return budget's value
+     */
     public float GetRemainingBudget(){
         return budget;
     }
 
+    /**
+     * <p>
+     * Getter for profit
+     * </p>
+     * @return profit's value
+     */
     public float GetCurrentProfits(){
         return profit;
     }

@@ -257,8 +257,6 @@ public class WMSInterface {
         scanner.nextLine();
     }
 
-
-
     public void HandleSuppliersAndClientsMenu(Scanner scanner){
         boolean inMenu = true;
         while (inMenu){

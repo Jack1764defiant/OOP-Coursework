@@ -9,14 +9,32 @@ public class StockItem{
         individualCost = _individualCost;
     }
 
+    /**
+     * <p>
+     * Getter for itemName
+     * </p>
+     * @return the value of itemName
+     */
     public String GetItemName(){
         return itemName;
     }
 
+    /**
+     * <p>
+     * Getter for amount
+     * </p>
+     * @return the quantity of this item
+     */
     public int GetAmount(){
         return amount;
     }
 
+    /**
+     * <p>
+     * Setter for amount, cannot go below 0 - throws a stockexception if you try to
+     * </p>
+     * @param newAmount the new quantity of this item
+     */
     public void SetAmount(int newAmount) throws StockException{
         if (newAmount >= 0){
             amount = newAmount;
@@ -26,10 +44,22 @@ public class StockItem{
         }
     }
 
+    /**
+     * <p>
+     * Getter for invidualCost
+     * </p>
+     * @return the cost of one of this item
+     */
     public float GetIndividualCost(){
         return individualCost;
     }
 
+    /**
+     * <p>
+     * Calculate the total cost the of quantity of this item
+     * </p>
+     * @return the cost of 1 of this item multiplied by the amount of this item
+     */
     public float GetTotalCost(){
         return individualCost * amount;
     }

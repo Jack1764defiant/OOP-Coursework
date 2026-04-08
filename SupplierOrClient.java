@@ -24,6 +24,13 @@ public class SupplierOrClient {
         orderHistory = _orderHistory;
     }
 
+    /**
+     * <p>
+     * Get list of orders from this company on the provided date
+     * </p>
+     * @param date - the date we want the orders from
+     * @return an arraylist of orders that occured on the specified date
+     */
     public ArrayList<Order> GetOrdersOnDate(LocalDate date){
         ArrayList<Order> ordersOnDate = new ArrayList<>();
         for (Order order : orderHistory){
@@ -34,6 +41,14 @@ public class SupplierOrClient {
         return ordersOnDate;
     }
 
+    /**
+     * <p>
+     * Get list of orders from this company between the provided dates
+     * </p>
+     * @param beginningDate - the dates we want the orders after (inclusive)
+     * @param endDate - the dates we want the orders before (inclusive)
+     * @return an arraylist of orders that occured between the specified dates
+     */
     public ArrayList<Order> GetOrdersBetweenDates(LocalDate beginningDate, LocalDate endDate){
         ArrayList<Order> ordersInPeriod = new ArrayList<>();
         for (Order order : orderHistory){
@@ -47,18 +62,42 @@ public class SupplierOrClient {
         return ordersInPeriod;
     }
 
+    /**
+     * <p>
+     * Add an order to this supplier or client's order history
+     * </p>
+     * @param order - the order we want added
+     */
     public void AddOrderToHistory(Order order){
         orderHistory.add(order);
     }
 
+    /**
+     * <p>
+     * Getter for ID
+     * </p>
+     * @return the ID of this supplier/client
+     */
     public int GetID(){
         return ID;
     }
 
+    /**
+     * <p>
+     * Getter for name
+     * </p>
+     * @return the name of this client/supplier
+     */
     public String GetName(){
         return name;
     }
 
+    /**
+     * <p>
+     * Setter for name
+     * </p>
+     * @param newName - the supplier/client's new name
+     */
     public void SetName(String newName){
         name = newName;
     }

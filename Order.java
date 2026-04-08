@@ -19,6 +19,12 @@ public class Order {
         orderStatus = OrderStatus.Placed;
     }
 
+    /**
+     * <p>
+     * Calculate the total worth of this order
+     * </p>
+     * @return the total cost of the order
+     */
     public float GetOrderCost(){
         float total = 0;
         for (StockItem itemOrder : itemsOrdered){
@@ -27,26 +33,62 @@ public class Order {
         return total;
     }
 
+    /**
+     * <p>
+     * Getter for otherPartiesID
+     * </p>
+     * @return the value of otherPartiesID
+     */
     public int GetID(){
         return otherPartiesID;
     }
 
+    /**
+     * <p>
+     * Getter for sale
+     * </p>
+     * @return the value of sale
+     */
     public boolean isSale(){
         return sale;
     }
 
+    /**
+     * <p>
+     * Getter for orderStatus
+     * </p>
+     * @return the value of orderStatus
+     */
     public OrderStatus GetOrderStatus(){
         return orderStatus;
     }
 
+    /**
+     * <p>
+     * Setter for orderStatus
+     * </p>
+     * @param newOrderStatus - what orderStatus should change to
+     */
     public void SetOrderStatus(OrderStatus newOrderStatus){
         orderStatus = newOrderStatus;
     }
 
+    /**
+     * <p>
+     * Getter for orderTime
+     * </p>
+     * @return the value of orderTime
+     */
     public LocalDateTime GetOrderTime(){
         return orderTime;
     }
 
+    /**
+     * <p>
+     * Getter for itemsOrdered
+     * </p>
+     * @return the contents of itemsOrdered
+     */
     public ArrayList<StockItem> GetItemsOrdered(){
         return itemsOrdered;
     }
